@@ -48,13 +48,16 @@ StartupServerSelection::loadSampleTime(VectorModelSelection &pVectorModelSelecti
 bool
 StartupServerSelection::calculate()
 {
+    QTime timeCount;
+    timeCount.start();
+    Aos_Assert_S("Start runSampleSelectionTask!");
     VectorModelSelection pVectorModelSelection;
     //状态(0:计算完成 1:计算中 2:新插入 3:计算失败 4:未计算 5:初始化 6:不满足条件)
-    //tb_eids_model_sample_time state=1 or state=4
+    //tb_eids_model_sample_time state=2
     bool rslt = loadSampleTime(pVectorModelSelection);
     if (!rslt)
     {
-        Aos_Assert_S("loadSampleConState Faild!");
+        Aos_Assert_S("loadSampleConState Failure!");
     }
 
     if (!pVectorModelSelection.empty())
@@ -62,7 +65,7 @@ StartupServerSelection::calculate()
         rslt = runSampleSelectionTask(pVectorModelSelection);
         if (!rslt)
         {
-            Aos_Assert_S("runSampleSelectionTask Faild!");
+            Aos_Assert_S("runSampleSelectionTask Failure!");
         }
         if (smDestory)
             return true;
@@ -77,18 +80,16 @@ StartupServerSelection::calculate()
 
     pVectorModelSelection.clear();
 
-    //1分钟
-    for (long iWait = 0; iWait < 1; iWait ++)
+    //更新服务状态监测时间(监控服务专用)
+    SINGLETON(RDbOperationSimple)->SubmitToControlProcessService();
+    while (true)
     {
-        //更新服务状态监测时间(监控服务专用)
-        SINGLETON(RDbOperationSimple)->SubmitToControlProcessService();
-        for (long i = 0; i < 60; i++)
-        {
-            if (smDestory)
-                return true;
+        if(timeCount.elapsed() > 60 * 1000)
+            break;
+        else
             PubOpt::SystemOpt::SleepWait(1000);
-        }
     }
+
     return true;
 }
 
@@ -101,10 +102,6 @@ StartupServerSelection::runSampleSelectionTask(VectorModelSelection &pVectorMode
     for (VectorModelSelection_It sItr = pVectorModelSelection.begin(); sItr != pVectorModelSelection.end(); ++sItr)
     {
         ModelSelectionMgr * modelSelection = *sItr;
-        std::string strLastModelId = modelSelection->mModelId;
-        //删除state为新插入; 状态(0:计算完成 1:计算中 2:新插入 3:计算失败 4:未计算 5:初始化)
-        //删除 tb_eids_model_sample_time_con tb_eids_model_sample_time  state=2
-        cleanSampleTimeData(strLastModelId);
 
         runSubTask(modelSelection);
         if (smDestory)
@@ -121,38 +118,36 @@ StartupServerSelection::runSubTask(ModelSelectionMgr * modelSelection)
 {
     std::string strSampleTimeId = modelSelection->mOriginalSTimeInfo->mSampleTimeId;
     //状态(0:计算完成 1:计算中 2:新插入 3:计算失败 4:未计算)
-    //tb_eids_model_sample_time state=1
+    //修改tb_eids_model_sample_time state = 1
     SINGLETON(RDbOperationSimple)->updateSampleTimeStateToOne(strSampleTimeId);
     bool rslt = modelSelection->loadConfigInfo();
     if (!rslt)
     {
-        Aos_Assert_S("loadConfigInfo Faild!");
+        Aos_Assert_S("loadConfigInfo Failure!");
         return true;
     }
-    if (smDestory)
-        return true;
 
     rslt = modelSelection->sampleSelection();
+
     if (!rslt)
     {
         SINGLETON(RDbOperationSimple)->updateSampleTimeStateToThree(strSampleTimeId);
-        Aos_Assert_S("sampleSelection Faild!");
+        Aos_Assert_S("sampleSelection Failure!");
         return true;
     }
 
-    if (smDestory)
-        return true;
-
-    //筛选后，如果筛选后生成了子记录则删除'筛选时间段信息'记录;
-    //否则不删除'筛选时间段信息'记录,只修改'筛选时间段信息'记录(tb_eids_model_sample_time)的State = 6和samples_sum = 0
     if (modelSelection->GetAfterScreeningSum() <= 0)
     {
+        //如果筛选后没有生成了子记录,修改tb_eids_model_sample_time,State = 6 和 samples_sum = 0
         SINGLETON(RDbOperationSimple)->updateSampleTimeStateToSix(strSampleTimeId);
     }
     else
     {
+        //删除初始筛选记录 tb_eids_model_sample_time
         SINGLETON(RDbOperationSimple)->deleteSampleTimeById(strSampleTimeId);
-        //update tb_eids_model_sample_time t set t.state = '0' where t.model_id='%s' and t.state = '2'
+
+        //筛选成功，把tb_eids_model_sample_time state置0
+        //update tb_eids_model_sample_time t set t.state = '0' where t.model_id='%s' and t.state = '1'
         SINGLETON(RDbOperationSimple)->updateSampleTimeStateToZero(modelSelection->mModelId);
     }
 

@@ -24,8 +24,12 @@ namespace Util
 
 	bool connectRtdbDB()
     {
-        SINGLETON(RtdbOpt)->connect();
-		return true;
+        bool result =  SINGLETON(RtdbOpt)->connect();
+        if(result)
+            PubOpt::StringOpt::StringFormat("Rsdb (QT) Connect Success");
+        else
+            PubOpt::StringOpt::StringFormat("Rsdb (QT) Connect Failure");
+        return result;
 	}
 
 
@@ -90,8 +94,7 @@ namespace Util
         DBServerInfo stServerInfo;
         stServerInfo.strSessionName = SINGLETON(ServiceSelectionConfig)->getSessionName();
         stServerInfo.strUserName = SINGLETON(ServiceSelectionConfig)->getUserName();
-        //stServerInfo.strPasswd = SINGLETON(ServiceSelectionConfig)->getPassWD();
-        stServerInfo.strPasswd = "Tzrd#2021@db";
+        stServerInfo.strPasswd = SINGLETON(ServiceSelectionConfig)->getPassWD();         //Tzrd#2021@db
         stServerInfo.strRsdbType = SINGLETON(ServiceSelectionConfig)->getRsdbType();
         stServerInfo.strIp = SINGLETON(ServiceSelectionConfig)->getRsdbIp();
         stServerInfo.iPort = CharPointerConvert2Number<int>(SINGLETON(ServiceSelectionConfig)->getRsdbPort().c_str());

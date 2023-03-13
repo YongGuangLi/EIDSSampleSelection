@@ -40,7 +40,7 @@ RDbOperationSimple::getSysGuid()
 bool
 RDbOperationSimple::deleteSampleTimeById(const std::string &strId)
 {
-    //执行静态的SQL语句
+    //初始删选记录
     std::string strSql = SINGLETON(RDbSQLAdapter)->getDeleteSampleTimeSQL(strId);
     bool nErr = Util::SQLDirectExecute(strSql);// 绑定查询SQL语句
     if (!nErr)
@@ -51,23 +51,23 @@ RDbOperationSimple::deleteSampleTimeById(const std::string &strId)
     }
 
     //手工筛选条件
-    strSql = SINGLETON(RDbSQLAdapter)->getDeleteSampleTimeConSQL(strId);
-    nErr = Util::SQLDirectExecute(strSql);// 绑定查询SQL语句
-    if (!nErr)
-    {
-        mStrErrorMessage = PubOpt::StringOpt::StringFormat("Prepare deleteSampleTimeCon SQL ERROR: %s",strSql.c_str());
-        Aos_Assert_S(mStrErrorMessage.c_str());
-        return false;
-    }
+//    strSql = SINGLETON(RDbSQLAdapter)->getDeleteSampleTimeConSQL(strId);
+//    nErr = Util::SQLDirectExecute(strSql);// 绑定查询SQL语句
+//    if (!nErr)
+//    {
+//        mStrErrorMessage = PubOpt::StringOpt::StringFormat("Prepare deleteSampleTimeCon SQL ERROR: %s",strSql.c_str());
+//        Aos_Assert_S(mStrErrorMessage.c_str());
+//        return false;
+//    }
 	return true;
 }
 
 bool
-RDbOperationSimple::updateSampleTimeStateToZero(const std::string &strModelId)
+RDbOperationSimple::updateSampleTimeStateToZero(const std::string &Id)
 {
     //执行静态的SQL语句
     //状态(0:计算完成 1:计算中 2:新插入 3:计算失败 4:未计算)
-    std::string strSql = SINGLETON(RDbSQLAdapter)->getUpdateModelSampleTimeState0SQL(strModelId);
+    std::string strSql = SINGLETON(RDbSQLAdapter)->getUpdateModelSampleTimeState0SQL(Id);
     bool nErr = Util::SQLDirectExecute(strSql);// 绑定查询SQL语句
     if (!nErr)
     {
@@ -133,9 +133,8 @@ RDbOperationSimple::updateSampleTimeStateToThree(const std::string &strSampleTim
 bool
 RDbOperationSimple::deleteSampleTimeState2ByModelId(const std::string &strModelId)
 {
-	//执行静态的SQL语句
-	std::string strSql = SINGLETON(RDbSQLAdapter)->getDeleteSampleTimeConStateSQL(strModelId);
-	//手工筛选条件
+    //手工筛选条件
+    std::string strSql = SINGLETON(RDbSQLAdapter)->getDeleteSampleTimeConStateSQL(strModelId);
     bool nErr = Util::SQLDirectExecute(strSql);// 绑定查询SQL语句
     if (!nErr)
     {

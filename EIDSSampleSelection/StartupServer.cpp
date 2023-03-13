@@ -54,9 +54,6 @@ StartupServer::initServiceAlarm()
 bool
 StartupServer::initial()
 {
-    if (!initialRtdb())
-        return false;
-
 	SINGLETON(RDbOperationSimple)->UpdateVersionNumber();
 	return true;
 }

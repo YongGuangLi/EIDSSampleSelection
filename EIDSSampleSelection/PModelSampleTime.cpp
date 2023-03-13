@@ -27,21 +27,23 @@ PModelSampleTime::~PModelSampleTime(void)
 
 bool 
 PModelSampleTime::saveModelSampleTime(
-		const std::string &modelId, 
+        const std::string &modelId,
+        const std::string &train_id,
 		const std::string &condId, 
 		SampleTimeInfo *timeInfo)
 {
     Aos_Assert_R(Util::IsQtConnect(), false);
 	
-    std::string strTimeState = "2";
+    std::string strTimeState = "1";
     std::string strEndDate = PubOpt::SystemOpt::DateTmToStr(timeInfo->mEndTime);
     std::string strStartDate = PubOpt::SystemOpt::DateTmToStr(timeInfo->mStartTime);
     std::string strSql = SINGLETON(RDbSQLAdapter)->getInsertModelSampleTimeSQL();
     
-    if(Util::SQLDirectExecute(QString::fromStdString(strSql).arg(timeInfo->mSampleTimeId.c_str()).arg(strStartDate.c_str()).arg(strEndDate.c_str()).arg(timeInfo->mStep)
-                                                            .arg(modelId.c_str()).arg(condId.c_str()).arg(timeInfo->mSampleSum).arg(strTimeState.c_str()).toStdString()))
+    if(!Util::SQLDirectExecute(QString::fromStdString(strSql).arg(timeInfo->mSampleTimeId.c_str()).arg(strStartDate.c_str()).
+                                                             arg(strEndDate.c_str()).arg(timeInfo->mStep).arg(modelId.c_str()).
+                                                             arg(condId.c_str()).arg(timeInfo->mSampleSum).arg(strTimeState.c_str())
+                                                             .arg(train_id.c_str()).toStdString()))
     {
-
     }
 	return true;
 }

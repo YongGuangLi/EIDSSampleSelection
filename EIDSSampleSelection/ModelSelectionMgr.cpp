@@ -172,10 +172,8 @@ ModelSelectionMgr::sampleSelection()
 
 
     Aos_Assert_R(selection(lStartCalTime, lEndCalTime, lStep), false);
-    if (StartupServer::smDestory)
-        return true;
 
-    saveSampleTimeInfoAll();
+    saveSampleTimeInfoPriv(true);
 
     Aos_WriteLog_D(PubOpt::StringOpt::StringFormat("run A3(end), id:%s, start_time:%s, end_time:%s, step:%d;",
                                                    mOriginalSTimeInfo->mSampleTimeId.c_str(),
@@ -232,19 +230,14 @@ ModelSelectionMgr::judgeManualFilterCondition(const long &lCalStampTime)
         SampleTimeConInfo * pTimeConInfo = *tItr;
         MapStringToDataValueInfo_It dItr = mMapDataValueInfo.find(pTimeConInfo->mMonitPointId);
         if (dItr == mMapDataValueInfo.end())
-        {
-            Aos_Assert_S("");
             continue;
-        }
 
         double fVal = dItr->second->getCurrVar();
         if (!pTimeConInfo->judgeManualCondition(lCalStampTime, fVal))
         {
             //LINXIAOYU
-            Aos_WriteLog_D((PubOpt::StringOpt::StringFormat(
-                                "judgeManualCondition lCalStampTime=%s, %s=%f;",
-                                PubOpt::SystemOpt::DateTmToStr(lCalStampTime).c_str(),
-                                dItr->second->mStrCode.c_str(), fVal)).c_str());
+            Aos_WriteLog_D((PubOpt::StringOpt::StringFormat( "judgeManualCondition lCalStampTime=%s, %s=%f;",
+                            PubOpt::SystemOpt::DateTmToStr(lCalStampTime).c_str(), dItr->second->mStrCode.c_str(), fVal)).c_str());
             return false;
         }
     }
@@ -384,7 +377,7 @@ ModelSelectionMgr::saveModelSampleTimeAndTimeCon(const std::string &condId, Vect
         PModelSampleTime *opt = new PModelSampleTime(Util::getRsdbAdapter());
 
         //insert into tb_eids_model_sample_time
-        opt->saveModelSampleTime(mModelId, condId, timeInfo);
+        opt->saveModelSampleTime(mModelId, mOriginalSTimeInfo->train_id, condId, timeInfo);
         delete opt;
 
         //insert into tb_eids_model_sample_time_cond

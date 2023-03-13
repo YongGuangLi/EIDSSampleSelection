@@ -47,8 +47,7 @@ void ServiceSelection::Run()
 		mStartSvr->stop();
 		mStopWait = false;
 		PubOpt::SystemOpt::SleepWait(2000);
-	}
-	Thread::SetTimeOut(100);
+    }
 }
 
 

@@ -37,7 +37,7 @@ public:
 	// 功能描述: 将tb_eids_model_sample_time中这个模型state的'计算中'改为"计算失败";
 	bool updateSampleTimeStateToThree(const std::string &strSampleTimeId);
 	// 功能描述: 将tb_eids_model_sample_time中这个模型state的'新增加'改为"计算完成";
-	bool updateSampleTimeStateToZero(const std::string &strModelId);
+    bool updateSampleTimeStateToZero(const std::string &Id);
 	// 功能描述: 当tb_eids_model_sample_time 的state是'计算中'，则表示是任务中断过，
 	// 然后重新计算，重新计算需要删除上次未完成的计算结果，而结果是
 	// 删除tb_eids_model_sample_time的state是'新插入'的记录

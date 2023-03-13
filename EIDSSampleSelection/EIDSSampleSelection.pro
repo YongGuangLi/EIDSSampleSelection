@@ -9,6 +9,11 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
+MOC_DIR = $$OUT_PWD/tmp/moc
+OBJECTS_DIR = $$OUT_PWD/tmp/obj
+UI_DIR = $$OUT_PWD/tmp/ui
+RCC_DIR = $$OUT_PWD/tmp/qrc
+
 SOURCES += main.cpp \
     AlarmLog.cpp \
     ConditionCal.cpp \

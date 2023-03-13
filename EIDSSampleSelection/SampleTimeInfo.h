@@ -19,6 +19,7 @@ struct SampleTimeInfo
 	long						mStep;			//步长
 	long						mSampleSum;		//样本条数
 	bool						mIsHis;			//状态(0:当前，1:历史)
+    std::string					train_id;	    //
 
 	SampleTimeInfo(void)
 	:

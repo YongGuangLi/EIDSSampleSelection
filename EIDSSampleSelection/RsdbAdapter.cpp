@@ -119,9 +119,14 @@ bool RsdbAdapter::QtConnect(const DBServerInfo &stServerInfo)
     foreach(QString driver,drivers)
         qDebug()<<driver;
 
+    std::string strModeName = SINGLETON(ServiceSelectionConfig)->getModeName();
+
     //arg(QString::fromStdString(stServerInfo.strPasswd))
     QString strConnName(m_ConnName.c_str());
     m_strRsdbType = PubOpt::StringOpt::StringUpper(stServerInfo.strRsdbType);
+
+
+
     if (SQL_SERVERCE == m_strRsdbType)
     {
         /*if(QSqlDatabase::contains(strConnName))

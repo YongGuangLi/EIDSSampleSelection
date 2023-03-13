@@ -85,13 +85,13 @@ ConditionCal::calculateArith(const long &lCalStampTime, MapStringToDataValueInfo
 		{
 			fValue = calEngine(pConditionInfo->mTranOutVarAndFun, strLocVar, strOutVarVal, strExp);
 
-			//std::string tt = PubOpt::StringOpt::StringFormat(
-			//"calEngine mTranOutVarAndFun:%s,strLocVar:%s,strOutVarVal:%s,value %s=%f;",
-			//pConditionInfo->mTranOutVarAndFun.c_str(),
-			//strLocVar.c_str(),
-			//strOutVarVal.c_str(),
-			//pConditionInfo->mCondId.c_str(), fValue);
-			//Aos_WriteLog_D(tt.c_str());	
+            std::string tt = PubOpt::StringOpt::StringFormat(
+            "calEngine mTranOutVarAndFun:%s,strLocVar:%s,strOutVarVal:%s,value %s=%f;",
+            pConditionInfo->mTranOutVarAndFun.c_str(),
+            strLocVar.c_str(),
+            strOutVarVal.c_str(),
+            pConditionInfo->mCondId.c_str(), fValue);
+            Aos_WriteLog_D(tt.c_str());
 		}
 	}
 	catch (...) 

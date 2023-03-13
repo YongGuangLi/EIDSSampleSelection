@@ -19,7 +19,7 @@
 #include <QDate>
 #include <QVariantList>
 #include <QSqlRecord>
-#include<QSqlDriver> 
+#include <QSqlDriver>
 
 #include <string>
 #include <iostream>

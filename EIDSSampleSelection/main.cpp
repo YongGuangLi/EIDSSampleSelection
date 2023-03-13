@@ -33,7 +33,7 @@ bool initMain(void)
 
     if (!SINGLETON(ServiceSelectionConfig)->initConfig(strPath + SAMPLESELE_CONFIG_FILE))
     {
-        std::cerr <<"Init Public Config Failed."<<std::endl;
+        std::cerr <<"Init Public Config Failure."<<std::endl;
         return false;
     }
 
@@ -41,7 +41,7 @@ bool initMain(void)
     bool bLogIsEnable = SINGLETON(ServiceSelectionConfig)->isShowLog();
     if (!SINGLETON(Log)->InitLog(strPath + "log/", strModeName, bLogIsEnable))
     {
-        std::cerr <<"Init Log Failed."<<std::endl;
+        std::cerr <<"Init Log Failure."<<std::endl;
         return false;
     }
     Aos_WriteLog("Initial LOG Environmental Success.");

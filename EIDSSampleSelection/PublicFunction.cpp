@@ -37,21 +37,21 @@ PublicFunction::pointIdSourceIdRtdbIsExist(MapStringToDataValueInfo	 &pMapDataVa
         std::string sourceId = dItr->second->mPointSource;
 		if (sourceId.empty())
 		{
-            Aos_WriteLog_D(PubOpt::StringOpt::StringFormat("sourceId is empty (%s);", sourceId.c_str()).c_str());
+            Aos_Assert_S(PubOpt::StringOpt::StringFormat("SourceId is empty (%s);", dItr->second->mStrCode.c_str()).c_str());
 			dItr->second->mSourceIdRtdbIsExist = false;
 			continue;
 		}
 
 		dItr->second->mSourceIdRtdbIsExist = true;
-		if (!SINGLETON(RtdbOpt)->rtdbIsExistPoint(sourceId))
-		{
-			Aos_WriteLog_D(PubOpt::StringOpt::StringFormat("Rtdb Not Exist Point (%s);", sourceId.c_str()).c_str());
-			dItr->second->mSourceIdRtdbIsExist = false;
-		} 
-		else
-		{
-			dItr->second->mSourceIdRtdbIsExist = true;
-		}
+        if (!SINGLETON(RtdbOpt)->rtdbIsExistPoint(sourceId))
+        {
+            Aos_Assert_S(PubOpt::StringOpt::StringFormat("Rtdb Not Exist Point (%s);", sourceId.c_str()).c_str());
+            dItr->second->mSourceIdRtdbIsExist = false;
+        }
+        else
+        {
+            dItr->second->mSourceIdRtdbIsExist = true;
+        }
 	}
 	return true;
 }

@@ -30,7 +30,7 @@ TbModelSampleTime::loadDB(VectorModelSelection &pVectorModelSelection)
     Aos_Assert_R(Util::IsQtConnect(), false);
 
     std::string strSql = SINGLETON(RDbSQLAdapter)->getModelSampleTimeSQL();
-
+    qDebug()<<QString::fromStdString(strSql);
     Aos_Assert_S(strSql.c_str());
     Aos_Assert_R(stmtPrepare(TB_SAMPEL_TIME_VALUECONFIG, strSql), false);
 
@@ -57,6 +57,8 @@ TbModelSampleTime::loadValue(VectorModelSelection &pVectorModelSelection)
         pSelection->mOriginalSTimeInfo->mEndTime  = mQtOpt->m_query->value(3).toDateTime().toTime_t();
 
         pSelection->mOriginalSTimeInfo->mStep = mQtOpt->m_query->value(4).toInt();
+
+        pSelection->mOriginalSTimeInfo->train_id = mQtOpt->m_query->value(5).toString().toStdString();
 
         pVectorModelSelection.push_back(pSelection);
     }

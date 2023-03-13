@@ -24,6 +24,9 @@
 #define SAMPLE_BASE_MODE_NAME_KEY					"ModeName"
 #define SAMPLE_BASE_MODE_NAME_DEFAULT_VALUE			"SampleSelection"
 
+
+#define XDB_CONFIG								    "XDB"
+
 #define MYSQL_CONFIG								"MYSQL"
 #define SQLSERVER_CONFIG							"SQLServer"
 #define RDB_SESSION_NAME_KEY						"SessionName"
@@ -76,17 +79,16 @@ public:
     // 功能描述：初始化公共配制信息
     bool initConfig(const std::string &strFname);
 public:
-    // 功能描述: 获取OCI连接会话名称
+    // 功能描述: 获取MYSQL连接会话
     std::string getSessionName(void);
-    // 功能描述: 获取OCI连接用户名
     std::string getUserName(void);
-    // 功能描述: 获取OCI连接密码
     std::string getPassWD(void);
-
     std::string getRsdbIp(void);
-
     std::string getRsdbPort(void);
 
+    // 功能描述: 获取XDB连接会话
+    std::string getXdbIp(void);
+    std::string getXdbPort(void);
 
 	bool isSysPath() {return false;}
 public:

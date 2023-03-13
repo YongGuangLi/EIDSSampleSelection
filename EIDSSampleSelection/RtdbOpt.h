@@ -30,7 +30,7 @@ public:
 	 DECLARE_SINGLETON_INIT(RtdbOpt)
 
 	 static bool	smSanityCheck;
-public:	
+public:
     bool connect();
 	// 功能描述: 从实时数据库中读取采集原始值D点值
 	bool rtdbGetHisValue(
@@ -43,7 +43,8 @@ public:
 
     std::vector<Point> getHistoryValue(const std::string strSourceId, const long &lStartTime, const long &lEndTime, const int iStep);
 private:
-    XdbThriftClient *client;
+    XdbThriftClient *client_;
+
 };
 
 #endif

@@ -31,7 +31,7 @@ const std::string g_strSysGuidSQL =
 
 //查询模型状态与时间段
 const std::string g_strModelSampleTimeSQL = 
-        "select model_id, id,  start_time,end_time,step from tb_eids_model_sample_time t  where t.state = 1 or t.state = 4";
+        "select model_id, id,  start_time,end_time, step, train_id from tb_eids_model_sample_time t  where t.state = 2";
 
 //查询模型状态与时间段(按机组分步式部署)
 const std::string g_strModelSampleTimeDistributedSQL = 
@@ -62,9 +62,9 @@ const std::string g_strMonitPointSQL =
 //诊断模型样本时间段
 const std::string g_strInsertModelSampleTimeSQL = 
 		"insert into tb_eids_model_sample_time(id, start_time, end_time, \
-         step, model_id, model_condition_id, samples_sum, state) values('%1', \
+         step, model_id, model_condition_id, samples_sum, state, train_id) values('%1', \
          str_to_date('%2','%Y-%m-%d %H:%i:%s'), str_to_date('%3','%Y-%m-%d %H:%i:%s'),	\
-         %4,  '%5', '%6', %7 , '%8')" ;
+         %4,  '%5', '%6', %7 , '%8', '%9')" ;
 
 //诊断模型样本时间段手工筛选条件
 const std::string g_strInsertModelSampleTimeConSQL = 
@@ -74,7 +74,7 @@ const std::string g_strInsertModelSampleTimeConSQL =
 
 //删除诊断模型样本时间段
 const std::string g_strDeleteSampleTimeSQL = 
-		"delete from tb_eids_model_sample_time where id = '%s'";
+        "delete from tb_eids_model_sample_time where id = '%s'";
 
 //删除诊断模型样本时间手工筛选条件
 const std::string g_strDeleteSampleTimeConSQL = 
@@ -86,7 +86,7 @@ const std::string g_strUpdateModelSampleTimeStateSQL =
 
 //更新诊断模型样本时间段状态
 const std::string g_strUpdateModelSampleTimeState0SQL = 
-		"update tb_eids_model_sample_time t set t.state = '0' where t.model_id='%s' and t.state = '2'";
+        "update tb_eids_model_sample_time t set t.state = '0' where t.model_id='%s' and t.state = '1'";
 
 //删除诊断模型样本时间段状态
 const std::string g_strDeleteSampleTimeState2SQL =

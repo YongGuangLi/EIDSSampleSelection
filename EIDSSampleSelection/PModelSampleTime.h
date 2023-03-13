@@ -25,7 +25,8 @@ public:
     virtual ~PModelSampleTime(void);
 public:
 	bool saveModelSampleTime(
-		const std::string &modelId, 
+        const std::string &modelId,
+        const std::string &train_id,
 		const std::string &condId, 
 		SampleTimeInfo *timeInfo);
 

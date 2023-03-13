@@ -263,6 +263,7 @@ RDbSQLAdapter::getDeleteSampleTimeConStateSQL(const std::string &strModelId)
 	{
 		strSql = PubOpt::StringOpt::StringFormat(
 			g_strDeleteSampleTimeConState2SQL.c_str(), strModelId.c_str());
+        qDebug()<<QString::fromStdString(strSql);
 		return strSql;
 	}
 

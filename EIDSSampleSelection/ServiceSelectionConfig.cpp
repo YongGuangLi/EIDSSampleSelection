@@ -89,38 +89,20 @@ std::string ServiceSelectionConfig::getRsdbTypeParmKey(void)  const
 
 std::string ServiceSelectionConfig::getSessionName(void)
 {
-	std::string strKey = getRsdbTypeParmKey();
-    std::string strSessionName = 
-        m_pConfigOpt->GetValueByKey(strKey, RDB_SESSION_NAME_KEY);
-    if (strSessionName.empty())
-    {
-        return RDB_SESSION_NAME_DEFAULT_VALUE;
-    }
-    return strSessionName;
+    std::string strReturn = m_pConfigOpt->GetValueByKey(MYSQL_CONFIG, RDB_SESSION_NAME_KEY);
+    return strReturn;
 }
 
 std::string ServiceSelectionConfig::getUserName(void)
 {
-	std::string strKey = getRsdbTypeParmKey();
-    std::string strUserName = 
-        m_pConfigOpt->GetValueByKey(strKey, RDB_USER_NAME_KEY);
-    if (strUserName.empty())
-    {
-        return RDB_USER_NAME_DEFAULT_VALUE;
-    }
-    return strUserName;
+    std::string strReturn = m_pConfigOpt->GetValueByKey(MYSQL_CONFIG, RDB_USER_NAME_KEY);
+    return strReturn;
 }
 
 std::string ServiceSelectionConfig::getPassWD(void)
 {
-	std::string strKey = getRsdbTypeParmKey();
-    std::string strPassWD = 
-        m_pConfigOpt->GetValueByKey(strKey, RDB_PASSWD_KEY);
-    if (strPassWD.empty())
-    {
-        return RDB_PASSWD_DEFAULT_VALUE;
-    }
-    return strPassWD;
+    std::string strReturn = m_pConfigOpt->GetValueByKey(MYSQL_CONFIG, RDB_PASSWD_KEY);
+    return strReturn;
 }
 
 std::string ServiceSelectionConfig::getRsdbIp(void)
@@ -133,7 +115,18 @@ std::string ServiceSelectionConfig::getRsdbIp(void)
 std::string ServiceSelectionConfig::getRsdbPort(void)
 {
     std::string strReturn = m_pConfigOpt->GetValueByKey(MYSQL_CONFIG, PORT);
+    return strReturn;
+}
 
+string ServiceSelectionConfig::getXdbIp()
+{
+    std::string strReturn = m_pConfigOpt->GetValueByKey(XDB_CONFIG, IP1);
+    return strReturn;
+}
+
+string ServiceSelectionConfig::getXdbPort()
+{
+    std::string strReturn = m_pConfigOpt->GetValueByKey(XDB_CONFIG, PORT);
     return strReturn;
 }
 
